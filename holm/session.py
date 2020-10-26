@@ -1,3 +1,5 @@
+import requests
+
 class Session:
   __instance = None
 

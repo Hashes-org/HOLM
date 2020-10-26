@@ -21,6 +21,7 @@ class Left:
     # check if there is already one of this type cached -> if not download 7z and extract it
     left_path = "data/left/" + self.type + ".txt"
     if not os.path.exists(left_path):
+      logging.log(logging.DEBUG, "Left does not exist, downloading...")
       self.download_left()
       self.update()
 
