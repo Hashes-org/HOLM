@@ -10,6 +10,7 @@ class Keys:
 
   def __init__(self):
     self.get_newest_key()
+    self.get_newest_time()
 
   def retrieve_keys(self, keys):
     logging.log(logging.INFO, "Retrieving " + str(len(keys)) + " keys...")
