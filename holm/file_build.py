@@ -48,9 +48,9 @@ class FileBuild:
       with open(self.output, "w") as outfile:
         for line in infile:
           line = line.strip("\r\n")
-          if line in self.add_data[line]:
+          if line in self.add_data.keys():
             self.add_data.pop(line)  # it's already added, so we don't need to add it
-          if line not in self.rem_data[line]:
+          if line not in self.rem_data.keys():
             outfile.write(line + "\n")
 
         # write add data to file which was not popped out yet
