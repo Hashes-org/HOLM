@@ -34,7 +34,7 @@ class Keys:
     self.current_newest = key
 
   def get_newest_time(self):
-    if self.current_newest is not None:
+    if self.newest_time is not None:
       return self.newest_time
     if not os.path.exists("data/keys/TIME"):
       return 0
