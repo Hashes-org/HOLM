@@ -24,7 +24,7 @@ class Left:
     if not os.path.exists(left_path):
       logging.log(logging.DEBUG, "Left does not exist, downloading...")
       self.download_left()
-      self.update()
+      self.update(output)
 
     # if file is there, get checksum
     checksum = file_sha1(left_path)
