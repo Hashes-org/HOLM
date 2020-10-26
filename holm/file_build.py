@@ -50,7 +50,7 @@ class FileBuild:
           line = line.strip("\r\n")
           if line in self.add_data.keys():
             self.add_data.pop(line)  # it's already added, so we don't need to add it
-          if line not in self.rem_data.keys():
+          if line.split(':')[0] not in self.rem_data.keys():
             outfile.write(line + "\n")
 
         # write add data to file which was not popped out yet
