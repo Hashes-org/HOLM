@@ -44,7 +44,7 @@ class FileBuild:
                 add_count += 1
 
     logging.log(logging.INFO, "Loaded " + str(add_count) + " potential entries to add and " + str(rem_count) + " potential entries to remove.")
-    with open(self.input, "r") as infile:
+    with open(self.input, "r", encoding='utf-8', errors='ignore') as infile:
       with open(self.output, "w") as outfile:
         for line in infile:
           line = line.strip("\r\n")

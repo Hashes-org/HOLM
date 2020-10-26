@@ -10,4 +10,9 @@ class Setting:
   def get_left(self):
     if 'left' in self.data.keys():
       return self.data['left']
-    return None
+    return []
+
+  def get_latest(self):
+    if 'latest' in self.data.keys():
+      return self.data['latest']
+    return []
