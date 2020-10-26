@@ -1,7 +1,6 @@
 import logging
 
 from holm.session import *
-from requests.sessions import Session
 
 from holm.config import Config
 
