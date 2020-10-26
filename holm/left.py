@@ -4,7 +4,6 @@ import os
 from holm.download import Download
 from holm.helpers import file_sha1
 from pyunpack import Archive
-import patoolib
 
 from holm.json_request import JsonRequest
 from holm.keys import Keys
@@ -38,25 +37,30 @@ class Left:
       return
 
     # load which key was retrieved latest and get left update time
-    keys_time = keys.get_newest_time()
     left_time = res['time']
 
     # if latest key is newer than left list -> get diff from key   else -> get diff from left
-    req = JsonRequest()
-    if left_time > keys_time or keys.get_newest_key() is None:
-      res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromLeftEst&checksum=" + checksum)
-    else:
-      res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromKeyEst&key=" + keys.get_newest_key())
+    res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromLeftEst&checksum=" + checksum)
     if not 'estimate' in res.keys():
-      logging.log(logging.ERROR, "Failed to estimate keys to download!")
+      logging.log(logging.ERROR, "Failed to estimate keys to download from left diff!")
       return
+    update_type = "left"
+    est = res['estimate']
 
-    logging.log(logging.INFO, "Estimated to download: " + str(res['estimate']['keys']) + " keys with " + str(res['estimate']['entries']) + " entries ")
+    if keys.get_newest_key() is not None:
+      res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromKeyEst&key=" + keys.get_newest_key())
+      if not 'estimate' in res.keys():
+        logging.log(logging.ERROR, "Failed to estimate keys to download from key diff!")
+        return
+      if res['estimate']['keys'] < est['keys']:
+        update_type = "key"
+        est = res['estimate']
+
+    logging.log(logging.INFO, "Estimated to download: " + str(est['keys']) + " keys with " + str(est['entries']) + " entries ")
     logging.log(logging.DEBUG, "Retrieve keys to download...")
 
     # retrieve list of keys
-    req = JsonRequest()
-    if left_time > keys_time or keys.get_newest_key() is None:
+    if update_type == 'left':
       res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromLeft&checksum=" + checksum)
     else:
       res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromKey&key=" + keys.get_newest_key())
