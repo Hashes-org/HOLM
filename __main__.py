@@ -53,6 +53,7 @@ if __name__ == '__main__':
 
     session = Session(requests.Session()).s
     session.headers.update({'User-Agent': 'HOLM v' + Initialize.get_version_number()})
+    session.headers.update({'referer': 'https://hashes.org'})
 
     # check if there is a lock file and check if this pid is still running
     if os.path.exists("lock.pid") and os.path.isfile("lock.pid"):
