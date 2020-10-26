@@ -4,11 +4,13 @@ import os
 import sys
 
 import psutil as psutil
+import requests
 
 from holm.config import Config
 from holm.helpers import file_get_contents
 from holm.initialize import Initialize
 from holm.left import Left
+from holm.session import Session
 from holm.setting import Setting
 
 
@@ -48,6 +50,9 @@ if __name__ == '__main__':
   try:
     config = Config()
     init_logging()
+
+    session = Session(requests.Session()).s
+    session.headers.update({'User-Agent': 'HOLM v' + Initialize.get_version_number()})
 
     # check if there is a lock file and check if this pid is still running
     if os.path.exists("lock.pid") and os.path.isfile("lock.pid"):
