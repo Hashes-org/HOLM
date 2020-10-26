@@ -4,6 +4,7 @@ import os
 from holm.download import Download
 from holm.helpers import file_sha1
 from pyunpack import Archive
+import patoolib
 
 from holm.json_request import JsonRequest
 from holm.keys import Keys
