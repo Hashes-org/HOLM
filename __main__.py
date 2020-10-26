@@ -7,6 +7,7 @@ import psutil as psutil
 import requests
 
 from holm.config import Config
+from holm.file_build import FileBuild
 from holm.helpers import file_get_contents
 from holm.initialize import Initialize
 from holm.left import Left
@@ -83,7 +84,7 @@ if __name__ == '__main__':
     lefts = setting.get_left()
     for left in lefts:
       l = Left(left)
-      l.update()
+      l.update(left + ".txt")
 
   except KeyboardInterrupt:
     logging.info("Exiting...")

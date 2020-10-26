@@ -2,6 +2,7 @@ import logging
 import os
 
 from holm.download import Download
+from holm.file_build import FileBuild
 from holm.helpers import file_sha1
 from pyunpack import Archive
 
@@ -15,7 +16,7 @@ class Left:
   def __init__(self, type):
     self.type = type
 
-  def update(self):
+  def update(self, output):
     keys = Keys()
 
     # check if there is already one of this type cached -> if not download 7z and extract it
@@ -71,7 +72,8 @@ class Left:
     # download remaining keys
     keys.retrieve_keys(res['keys'])
 
-    # TODO: build new left list
+    fb = FileBuild("data/left/" + self.type + ".txt", res['keys'], output, self.type)
+    fb.generate()
 
   def download_left(self):
     Download.download("https://hashes.org/download.php?leftId=true&type=" + self.type, "data/left/" + self.type + ".7z")
