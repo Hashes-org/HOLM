@@ -37,9 +37,6 @@ class Left:
       os.remove("data/left/" + self.type + ".txt")
       return
 
-    # load which key was retrieved latest and get left update time
-    left_time = res['time']
-
     # if latest key is newer than left list -> get diff from key   else -> get diff from left
     res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromLeftEst&checksum=" + checksum)
     if not 'estimate' in res.keys():
@@ -61,18 +58,21 @@ class Left:
     logging.log(logging.DEBUG, "Retrieve keys to download...")
 
     # retrieve list of keys
-    if update_type == 'left':
-      res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromLeft&checksum=" + checksum)
-    else:
-      res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromKey&key=" + keys.get_newest_key())
+    res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromLeft&checksum=" + checksum)
     if not 'keys' in res.keys():
       logging.log(logging.ERROR, "Failed get keys to download!")
       return
+    left_keys = res['keys']
+    if update_type != 'left':
+      res = req.execute("https://hashes.org/api/holm.php?action=getDiffFromKey&key=" + keys.get_newest_key())
+      if not 'keys' in res.keys():
+        logging.log(logging.ERROR, "Failed get keys to download!")
+        return
 
     # download remaining keys
     keys.retrieve_keys(res['keys'])
 
-    fb = FileBuild("data/left/" + self.type + ".txt", res['keys'], output, self.type)
+    fb = FileBuild("data/left/" + self.type + ".txt", left_keys, output, self.type)
     fb.generate()
 
   def download_left(self):
